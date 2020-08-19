@@ -20,6 +20,7 @@ require "uuid"
 module Avram
   Habitat.create do
     setting lazy_load_enabled : Bool = true
+    setting perform_database_check : Bool = false
     setting database_to_migrate : Avram::Database.class, example: "AppDatabase"
     setting time_formats : Array(String) = [] of String
   end
