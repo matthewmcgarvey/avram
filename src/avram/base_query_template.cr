@@ -1,5 +1,5 @@
 class Avram::BaseQueryTemplate
-  macro setup(type, columns, associations, primary_key_name, *args, **named_args)
+  macro setup(type, columns, associations, *args, **named_args)
     class ::{{ type }}::BaseQuery < Avram::Query
       private class Nothing
       end
@@ -22,6 +22,8 @@ class Avram::BaseQueryTemplate
 
       @@schema_class = {{ type }}
 
+      {% primary_key_name = type.resolve.constant("PRIMARY_KEY_NAME") %}
+
       # If not using default 'id' primary key
       {% if primary_key_name.id != "id".id %}
         # Then point 'id' to the primary key
@@ -31,7 +33,7 @@ class Avram::BaseQueryTemplate
       {% end %}
 
       def primary_key_name
-        :{{ primary_key_name.id }}
+        {{ type }}.primary_key_name
       end
 
       macro generate_criteria_method(query_class, name, type)

@@ -132,7 +132,7 @@ abstract class Avram::Model
     alias PrimaryKeyType = {{ type_declaration.type }}
 
     def self.primary_key_name : Symbol
-      :{{ type_declaration.var.stringify }}
+      {{ type_declaration.var.symbolize }}
     end
 
     def primary_key_name : Symbol
