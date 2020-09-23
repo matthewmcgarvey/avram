@@ -1,5 +1,5 @@
 class Avram::SaveOperationTemplate
-  macro setup(type, *args, **named_args)
+  macro setup(type)
     class ::{{ type }}::BaseForm
       macro inherited
         \{% raise "BaseForm has been renamed to SaveOperation. Please inherit from {{ type }}::SaveOperation." %}

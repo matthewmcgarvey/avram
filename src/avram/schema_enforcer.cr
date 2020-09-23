@@ -2,7 +2,7 @@ module Avram::SchemaEnforcer
   ALL_MODELS     = [] of Avram::Model.class
   MODELS_TO_SKIP = [] of String # Stringified class name
 
-  macro setup(type, *args, **named_args)
+  macro setup(type)
     def self.ensure_correct_column_mappings!
       return if Avram::SchemaEnforcer::MODELS_TO_SKIP.includes?(self.name)
 

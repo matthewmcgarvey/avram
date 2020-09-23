@@ -1,5 +1,5 @@
 class Avram::BaseQueryTemplate
-  macro setup(type, *args, **named_args)
+  macro setup(type)
     class ::{{ type }}::BaseQuery < Avram::Query
       private class Nothing
       end
