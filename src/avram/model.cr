@@ -104,7 +104,6 @@ abstract class Avram::Model
     validate_primary_key
 
     Avram::Model.setup_initialize({{ @type }})
-    Avram::Model.setup_db_mapping({{ @type }})
     Avram::Model.setup_getters({{ @type }})
     Avram::Model.setup_column_names_method({{ @type }})
     Avram::BaseQueryTemplate.setup({{ @type }})
