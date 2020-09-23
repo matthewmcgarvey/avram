@@ -207,9 +207,9 @@ abstract class Avram::Model
     PG::EscapeHelper.escape_literal(id.to_s)
   end
 
-  macro setup_initialize(columns, *args, **named_args)
+  macro setup_initialize(type, *args, **named_args)
     def initialize(
-        {% for column in columns %}
+        {% for column in type.resolve.constant("COLUMNS") %}
           @{{column[:name]}},
         {% end %}
       )
