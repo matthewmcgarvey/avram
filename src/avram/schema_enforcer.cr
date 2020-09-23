@@ -2,24 +2,24 @@ module Avram::SchemaEnforcer
   ALL_MODELS     = [] of Avram::Model.class
   MODELS_TO_SKIP = [] of String # Stringified class name
 
-  macro setup(table_name, columns, type, *args, **named_args)
+  macro setup(type, *args, **named_args)
     def self.ensure_correct_column_mappings!
       return if Avram::SchemaEnforcer::MODELS_TO_SKIP.includes?(self.name)
 
       attributes = [
-        {% for attribute in columns %}
+        {% for attribute in type.resolve.constant("COLUMNS") %}
           { name: :{{attribute[:name]}}, nilable: {{ attribute[:nilable] }}, type: {{ attribute[:type] }} },
         {% end %}
       ]
 
       EnsureExistingTable.new(
         model_class: {{ type }},
-        table_name: :{{table_name}},
+        table_name: {{ type }}.table_name,
         database: {{ type }}.database
       ).ensure_exists!
       EnsureMatchingColumns.new(
         model_class: {{ type }},
-        table_name: :{{table_name}},
+        table_name: {{ type }}.table_name,
         database: {{ type }}.database
       ).ensure_matches! attributes
     end
