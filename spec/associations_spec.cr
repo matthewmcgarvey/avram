@@ -86,7 +86,7 @@ describe Avram::Model do
     describe "has_one" do
       it "returns associated model" do
         item = LineItemBox.create
-        price = PriceBox.new.line_item_id(item.id).create
+        price = Billing::PriceBox.new.line_item_id(item.id).create
         item.price.should eq price
       end
     end
@@ -94,7 +94,7 @@ describe Avram::Model do
     describe "belongs_to" do
       it "returns associated model" do
         item = LineItemBox.create
-        price = PriceBox.new.line_item_id(item.id).create
+        price = Billing::PriceBox.new.line_item_id(item.id).create
         price.line_item.should eq item
       end
 

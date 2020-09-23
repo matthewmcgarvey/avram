@@ -263,7 +263,7 @@ describe "Preloading" do
 
   it "preloads uuid belongs_to" do
     item = LineItemBox.create
-    PriceBox.new.line_item_id(item.id).create
+    Billing::PriceBox.new.line_item_id(item.id).create
 
     PriceQuery.new.preload_line_item.first.line_item.should eq item
   end

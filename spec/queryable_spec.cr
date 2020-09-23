@@ -1131,14 +1131,14 @@ describe Avram::Queryable do
     it "clones nested preloads" do
       Avram.temp_config(lazy_load_enabled: false) do
         item = LineItemBox.create
-        PriceBox.create &.line_item_id(item.id).in_cents(500)
+        Billing::PriceBox.create &.line_item_id(item.id).in_cents(500)
         product = ProductBox.create
         LineItemProductBox.create &.line_item_id(item.id).product_id(product.id)
 
         products = Product::BaseQuery.new
           .preload_line_items(LineItem::BaseQuery.new.preload_price)
         cloned_products = products.clone
-        products.first.line_items.first.price.as(Price).in_cents.should eq(500)
+        products.first.line_items.first.price.as(Billing::Price).in_cents.should eq(500)
         cloned_products.first.line_items.first.price.should_not be_nil
       end
     end
@@ -1224,7 +1224,7 @@ describe Avram::Queryable do
     describe "when you query from the belongs_to side" do
       it "returns a record" do
         line_item = LineItemBox.create &.name("Thing 1")
-        price = PriceBox.create &.in_cents(100).line_item_id(line_item.id)
+        price = Billing::PriceBox.create &.in_cents(100).line_item_id(line_item.id)
 
         query = PriceQuery.new.where_line_items(LineItemQuery.new.name("Thing 1"))
         query.first.should eq price
@@ -1234,7 +1234,7 @@ describe Avram::Queryable do
     describe "when you query from the has_one side" do
       it "returns a record" do
         line_item = LineItemBox.create &.name("Thing 1")
-        PriceBox.create &.in_cents(100).line_item_id(line_item.id)
+        Billing::PriceBox.create &.in_cents(100).line_item_id(line_item.id)
 
         query = LineItemQuery.new.where_price(PriceQuery.new.in_cents(100))
         query.first.should eq line_item
