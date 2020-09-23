@@ -24,7 +24,6 @@ abstract class Avram::Model
     {% end %}
   end
 
-  register_setup_step Avram::Model.setup_table_name
   register_setup_step Avram::Model.setup_initialize
   register_setup_step Avram::Model.setup_getters
   register_setup_step Avram::Model.setup_column_names_method
@@ -114,6 +113,8 @@ abstract class Avram::Model
     {% unless table_name %}
       {% table_name = run("../run_macros/infer_table_name.cr", @type.id) %}
     {% end %}
+    TABLE_NAME = {{table_name.id.symbolize}}
+    @@table_name = TABLE_NAME
 
     default_columns
 
@@ -204,11 +205,6 @@ abstract class Avram::Model
 
   private def escape_primary_key(id : UUID)
     PG::EscapeHelper.escape_literal(id.to_s)
-  end
-
-  macro setup_table_name(table_name, *args, **named_args)
-    @@table_name = :{{table_name}}
-    TABLE_NAME = :{{table_name}}
   end
 
   macro setup_initialize(columns, *args, **named_args)
