@@ -13,3 +13,12 @@ end
 
 class PriceQuery < Billing::Price::BaseQuery
 end
+
+class SavePrice < Billing::Price::SaveOperation
+  permit_columns in_cents
+  needs line_item : LineItem
+
+  before_save do
+    line_item_id.value = line_item.id
+  end
+end

@@ -86,7 +86,7 @@ describe Avram::Model do
     describe "has_one" do
       it "returns associated model" do
         item = LineItemBox.create
-        price = Billing::PriceBox.new.line_item_id(item.id).create
+        price = SavePrice.create!(in_cents: 99, line_item: item)
         item.price.should eq price
       end
     end
