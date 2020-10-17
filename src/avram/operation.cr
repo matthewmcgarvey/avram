@@ -5,13 +5,16 @@ require "./save_operation_errors"
 require "./param_key_override"
 require "./needy_initializer"
 
-abstract class Avram::Operation
+abstract class Avram::Operation(T)
   include Avram::NeedyInitializer
   include Avram::DefineAttribute
   include Avram::Validations
   include Avram::SaveOperationErrors
   include Avram::ParamKeyOverride
   include Avram::Callbacks
+
+  register_event :before_run
+  register_event :after_run, T
 
   @params : Avram::Paramable
   getter params
@@ -52,13 +55,7 @@ abstract class Avram::Operation
   # ```
   def self.run(params : Avram::Paramable, *args, **named_args)
     operation = self.new(params, *args, **named_args)
-    operation.before_run
-    value = operation.run
-    if operation.valid?
-      operation.after_run(value)
-    else
-      value = nil
-    end
+    value = operation.do_run
     yield operation, value
   end
 
@@ -75,13 +72,7 @@ abstract class Avram::Operation
     end
   end
 
-  def before_run
-  end
-
-  abstract def run
-
-  def after_run(_value)
-  end
+  abstract def run : T
 
   def initialize(@params)
   end
@@ -92,6 +83,16 @@ abstract class Avram::Operation
 
   def valid?
     attributes.all? &.valid?
+  end
+
+  def do_run
+    run_event :before_run
+    value = run
+    if valid?
+      run_event :after_run, value
+    else
+      value = nil
+    end
   end
 
   def self.param_key

@@ -1,12 +1,12 @@
 require "../spec_helper"
 
-private class OperationWithNeeds < Avram::Operation
+private class OperationWithNeeds < Avram::Operation(String)
   needs tags : Array(String)
   needs id : Int32
   attribute title : String
   attribute published : Bool = false
 
-  def run
+  def run : String
     tags.join(", ")
   end
 end

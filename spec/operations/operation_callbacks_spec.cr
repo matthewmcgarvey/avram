@@ -11,7 +11,7 @@ module TestableOperation
   end
 end
 
-private class OperationWithCallbacks < Avram::Operation
+private class OperationWithCallbacks < Avram::Operation(Int32?)
   include TestableOperation
   attribute number : Int32 = 1
 
@@ -23,7 +23,7 @@ private class OperationWithCallbacks < Avram::Operation
     mark_callback("after_run_in_a_block with #{return_value_of_run_method}")
   end
 
-  def run
+  def run : Int32?
     number.value
   end
 

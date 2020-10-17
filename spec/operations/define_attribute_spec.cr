@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-private class OperationWithAttributes < Avram::Operation
+private class OperationWithAttributes < Avram::Operation(Array(String | Int32))
   param_key :data
   attribute title : String
   attribute count : Int32
@@ -12,7 +12,7 @@ private class OperationWithAttributes < Avram::Operation
     count.value = 4
   end
 
-  def run
+  def run : Array(String | Int32)
     [title, count]
   end
 end

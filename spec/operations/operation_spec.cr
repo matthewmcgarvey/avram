@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-private class TestOperation < Avram::Operation
+private class TestOperation < Avram::Operation(String)
   attribute name : String
   attribute age : Int32
 
@@ -8,32 +8,32 @@ private class TestOperation < Avram::Operation
     validate_required name
   end
 
-  def run
+  def run : String
     "Lucky Test"
   end
 end
 
-private class FailingTestOperation < Avram::Operation
+private class FailingTestOperation < Avram::Operation(Nil)
   attribute name : String
 
   before_run do
     validate_required name
   end
 
-  def run
+  def run : Nil
     nil
   end
 end
 
-private class TestOperationWithParamKey < Avram::Operation
+private class TestOperationWithParamKey < Avram::Operation(String)
   param_key :custom_key
 
-  def run
+  def run : String
     "Custom Key Test"
   end
 end
 
-private class TestOperationWithMultipleValidations < Avram::Operation
+private class TestOperationWithMultipleValidations < Avram::Operation(String)
   attribute name : String
   attribute age : Int32
 
@@ -42,7 +42,7 @@ private class TestOperationWithMultipleValidations < Avram::Operation
     validate_old_enough age
   end
 
-  def run
+  def run : String
     "Custom Key Test"
   end
 
@@ -61,17 +61,17 @@ private class CanUseSameVirtualAttributeTwiceInModelBackedSaveOperation < User::
   attribute password : String
 end
 
-private class CanUseSameVirtualAttributeTwiceInOperation < Avram::Operation
+private class CanUseSameVirtualAttributeTwiceInOperation < Avram::Operation(Nil)
   attribute name : String
 
-  def run
+  def run : Nil
   end
 end
 
-private class ParamKeySaveOperation < Avram::Operation
+private class ParamKeySaveOperation < Avram::Operation(Nil)
   param_key :custom_param
 
-  def run
+  def run : Nil
   end
 end
 

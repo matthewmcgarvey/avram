@@ -23,6 +23,10 @@ abstract class Avram::SaveOperation(T)
   include Avram::MarkAsFailed
   include Avram::InheritColumnAttributes
 
+  register_event :before_save
+  register_event :after_save, T
+  register_event :after_commit, T
+
   enum SaveStatus
     Saved
     SaveFailed
@@ -312,18 +316,18 @@ abstract class Avram::SaveOperation(T)
   end
 
   def save : Bool
-    before_save
+    run_event :before_save
     if valid? && (!persisted? || changes.any?)
       transaction_committed = database.transaction do
         insert_or_update
         saved_record = record.not_nil!
-        after_save(saved_record)
+        run_event :after_save, saved_record
         true
       end
 
       if transaction_committed
         saved_record = record.not_nil!
-        after_commit(saved_record)
+        run_event :after_commit, saved_record
         self.save_status = SaveStatus::Saved
         Avram::Events::SaveSuccessEvent.publish(
           operation_class: self.class.name,
@@ -370,12 +374,6 @@ abstract class Avram::SaveOperation(T)
   private def record_id
     @record.try &.id
   end
-
-  def before_save; end
-
-  def after_save(_record : T); end
-
-  def after_commit(_record : T); end
 
   private def insert : T
     self.created_at.value ||= Time.utc if responds_to?(:created_at)

@@ -12,7 +12,7 @@ class Avram::SaveOperationTemplate
 
     class ::{{ type }}::SaveOperation < Avram::SaveOperation({{ type }})
       {% if primary_key_type.id == UUID.id %}
-        before_save set_uuid
+        before_save :set_uuid
 
         def set_uuid
           {{ primary_key_name.id }}.value ||= UUID.random()
