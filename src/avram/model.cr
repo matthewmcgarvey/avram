@@ -105,6 +105,7 @@ abstract class Avram::Model
     setup(Avram::Model.setup_getters, {{ table_name }})
     setup(Avram::Model.setup_column_names_method, {{ table_name }})
     setup(Avram::BaseQueryTemplate.setup, {{ table_name }})
+    setup(Avram::BaseQueryTemplate.setup_with_primary_key, {{ table_name }})
     setup(Avram::SaveOperationTemplate.setup, {{ table_name }})
     setup(Avram::SchemaEnforcer.setup, {{ table_name }})
   end
