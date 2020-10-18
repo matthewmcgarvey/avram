@@ -1,5 +1,7 @@
 class CommentCount < BaseModel
-  view do
+  skip_default_columns
+
+  table do
     belongs_to post : Post
     column count : Int32
   end
