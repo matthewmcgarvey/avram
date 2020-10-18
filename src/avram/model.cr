@@ -30,6 +30,7 @@ abstract class Avram::Model
   register_setup_step Avram::Model.setup_getters
   register_setup_step Avram::Model.setup_column_names_method
   register_setup_step Avram::BaseQueryTemplate.setup
+  register_setup_step Avram::BaseQueryTemplate.setup_with_primary_key
   register_setup_step Avram::SaveOperationTemplate.setup
   register_setup_step Avram::SchemaEnforcer.setup
 
